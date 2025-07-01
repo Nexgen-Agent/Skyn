@@ -1,3 +1,5 @@
+/* Luxury Themed App.css for Lonz Flawless Aura - Skyn */
+
 body {
   margin: 0;
   padding: 0;
@@ -9,52 +11,106 @@ body {
   transition: background 0.3s;
 }
 
-/* Optional: Add a little luxury glassmorphism for cards/sections */
+/* Glassmorphism for cards/sections */
 .glass {
-  background: rgba(255,255,255,0.4);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-  backdrop-filter: blur(8px);
-  border-radius: 24px;
-  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.16);
+  backdrop-filter: blur(12px);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-/* Headings and CTA refinement */
+/* Headings */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', 'DM Sans', sans-serif;
   font-weight: 700;
-  letter-spacing: -1px;
   color: #6B0F1A;
+  letter-spacing: -0.5px;
+  margin-top: 0;
+  margin-bottom: 0.6em;
+  line-height: 1.15;
 }
 
-a {
-  color: #9b2246;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-a:hover {
-  color: #6B0F1A;
+/* Paragraphs */
+p {
+  font-family: 'DM Sans', 'Poppins', sans-serif;
+  color: #7c2d4a;
+  font-size: 1.08rem;
+  line-height: 1.6;
+  margin-bottom: 1.1em;
 }
 
+/* Luxury Buttons */
 button, .btn {
-  background-color: #6B0F1A;
+  background: linear-gradient(90deg, #6B0F1A 70%, #9b2246 100%);
   color: #fff;
   border: none;
-  padding: 12px 32px;
+  padding: 14px 38px;
   border-radius: 100px;
-  font-size: 1rem;
+  font-size: 1.12rem;
   font-family: inherit;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(155,34,70,0.07);
+  box-shadow: 0 3px 14px rgba(155,34,70,0.08);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
 }
 button:hover, .btn:hover {
-  background-color: #9b2246;
+  background: linear-gradient(90deg, #9b2246 70%, #6B0F1A 100%);
+  transform: translateY(-2px) scale(1.025);
+  box-shadow: 0 6px 24px rgba(155,34,70,0.13);
 }
 
-/* Responsive padding */
+/* Links */
+a {
+  color: #9b2246;
+  text-decoration: none;
+  transition: color 0.18s;
+}
+a:hover {
+  color: #6B0F1A;
+  text-decoration: underline;
+}
+
+/* Inputs and Textareas */
+input, textarea, select {
+  border-radius: 18px;
+  border: 1px solid #e7b2d6;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: rgba(255,255,255,0.7);
+  outline: none;
+  margin-bottom: 1em;
+  transition: border 0.18s, box-shadow 0.18s;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: #9b2246;
+  box-shadow: 0 2px 14px rgba(155,34,70,0.07);
+}
+
+/* Section spacing */
+section {
+  padding: 60px 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive padding and font size */
 @media (max-width: 600px) {
   body {
-    padding: 0 8px;
+    padding: 0 6px;
+  }
+  h1 {
+    font-size: 2.1rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  button, .btn {
+    padding: 12px 22px;
+    font-size: 1rem;
+  }
+  section {
+    padding: 34px 0;
   }
 }
