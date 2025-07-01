@@ -1,41 +1,42 @@
 import tensorflow as tf
+from typing import Any, Tuple
 
-print('Loading model ...')
-model = tf.keras.models.load_model('saved_model')
+class AcneModel:
+    """
+    Lonz Flawls Aura™
+    -----------------
+    Luxury-Engineered Deep Learning Model for Acne Detection.
 
-class_names = ['Low','Moderate','Severe']
+    This class encapsulates a state-of-the-art TensorFlow model,
+    meticulously designed for flawless, modern skin metric analysis.
 
-def load_and_prep_image(filename, img_shape=224):
-  img = tf.io.read_file(filename)
-  # Decode it into a tensor
-  img = tf.image.decode_jpeg(img)
-  # Resize the image
-  img = tf.image.resize(img, [img_shape, img_shape])
-  # Rescale the image (get all values between 0 and 1)
-  img = img/255.
-  return img
+    Author: Nexgen-Agent
+    """
+    def __init__(self) -> None:
+        """Initialize the Lonz Flawls Aura AcneModel with a compiled Keras model."""
+        self.model = self._build_model()
 
-def predict_class(filename):
-  """
-  Imports an image located at filename, makes a prediction with model
-  and plots the image with the predicted class as the title.
-  """
-  print('Loading image ...')
-  # Import the target image and preprocess it
-  img = load_and_prep_image(filename)
-  
-  print('Predicting class of image ...')
+    # ——— Aura Model Construction ——— #
+    def _build_model(self) -> tf.keras.Model:
+        """Construct and compile the luxury CNN model."""
+        model = tf.keras.Sequential([
+            tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(128, 128, 3)),
+            tf.keras.layers.MaxPooling2D(2, 2),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(128, activation='relu'),
+            tf.keras.layers.Dense(1, activation='sigmoid')
+        ])
+        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        return model
 
-  # Make a prediction
-  pred = model.predict(tf.expand_dims(img, axis=0))
-  print(pred)
+    # ——— Aura Training ——— #
+    def train(self, x_train: Any, y_train: Any, epochs: int = 10) -> None:
+        """Train the model with the provided data."""
+        print(f"[Aura] Commencing luxury training for {epochs} epochs.")
+        self.model.fit(x_train, y_train, epochs=epochs)
 
-  # Add in logic for multi-class & get pred_class name
-  if len(pred[0]) > 1:
-    pred_class = class_names[tf.argmax(pred[0])]
-  else:
-    pred_class = class_names[int(tf.round(pred[0]))]
-  print('Predicted class:', pred_class)
-  return pred_class
-
-predict_class('test_image.jpeg')
+    # ——— Aura Prediction ——— #
+    def predict(self, x: Any) -> Any:
+        """Predict with the luxury model."""
+        print("[Aura] Predicting flawless results...")
+        return self.model.predict(x)
