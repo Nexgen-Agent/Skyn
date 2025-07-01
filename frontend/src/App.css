@@ -1,4 +1,60 @@
 body {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fff1e0 0%, #f9e6f9 50%, #f5eafd 100%);
+  font-family: 'DM Sans', 'Poppins', sans-serif;
+  color: #6B0F1A;
+  box-sizing: border-box;
+  transition: background 0.3s;
+}
+
+/* Optional: Add a little luxury glassmorphism for cards/sections */
+.glass {
+  background: rgba(255,255,255,0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  backdrop-filter: blur(8px);
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+/* Headings and CTA refinement */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', 'DM Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: #6B0F1A;
+}
+
+a {
+  color: #9b2246;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: #6B0F1A;
+}
+
+button, .btn {
+  background-color: #6B0F1A;
+  color: #fff;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 100px;
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(155,34,70,0.07);
+}
+button:hover, .btn:hover {
+  background-color: #9b2246;
+}
+
+/* Responsive padding */
+@media (max-width: 600px) {
+  body {
+    padding: 0 8px;
+  }
 }
