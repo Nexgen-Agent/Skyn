@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-
-// MUI
+// Material UI
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Radio from '@mui/material/Radio';
@@ -15,8 +14,7 @@ import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-
-// controllers
+// Controllers
 import { putForm } from '../controllers/actions';
 import { useLocation } from 'react-router';
 
@@ -54,7 +52,7 @@ const Form = () => {
   const { type, tone, acne } = data;
 
   const [currType, setCurrType] = useState(type);
-  const [currTone, setCurrTone] = useState(parseInt(tone));
+  const [currTone, setCurrTone] = useState(Number(tone));
   const [currAcne, setAcne] = useState(acne);
   const [features, setFeatures] = useState({
     "normal": false, "dry": false, "oily": false, "combination": false,
@@ -65,10 +63,10 @@ const Form = () => {
   });
 
   const handleChange = (event) => {
-    setFeatures({
-      ...features,
+    setFeatures(prev => ({
+      ...prev,
       [event.target.name]: event.target.checked,
-    });
+    }));
   };
 
   const handleTone = (e) => setCurrTone(Number(e.target.value));
@@ -77,23 +75,26 @@ const Form = () => {
   const navigate = useNavigate();
 
   const handleSubmit = () => {
-    // FIX: Don't mutate state directly! Work on a new object.
-    let updatedFeatures = { ...features };
+    // Never mutate state directly. Work with a new object.
+    const updatedFeatures = { ...features };
 
     if (currType === 'All') {
-      updatedFeatures['normal'] = true;
-      updatedFeatures['dry'] = true;
-      updatedFeatures['oily'] = true;
-      updatedFeatures['combination'] = true;
+      updatedFeatures.normal = true;
+      updatedFeatures.dry = true;
+      updatedFeatures.oily = true;
+      updatedFeatures.combination = true;
     } else {
       updatedFeatures[currType.toLowerCase()] = true;
     }
+
     if (currAcne !== "Low") {
-      updatedFeatures['acne'] = true;
+      updatedFeatures.acne = true;
     }
-    for (const key in updatedFeatures) {
+
+    Object.keys(updatedFeatures).forEach(key => {
       updatedFeatures[key] = updatedFeatures[key] ? 1 : 0;
-    }
+    });
+
     putForm(updatedFeatures, currType, currTone, navigate);
   };
 
