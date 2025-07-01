@@ -1,34 +1,24 @@
 import React from "react";
-import './App.css'
-import {
-  BrowserRouter as Router,
-  Routes as Switch,
-  Route,
-  useHistory  
-} from "react-router-dom";
-
-import ImageInput from "./views/imageInput";
-import Recommendations from './views/Recommendations'
-import Form from "./views/Form";
-
-// MUI
-import CssBaseline from '@mui/material/CssBaseline';
+import Hero from "./components/Hero";
+// import Navbar from "./components/Navbar";
+// import ServiceCards from "./components/ServiceCards";
+// import Footer from "./components/Footer";
 
 function App() {
   return (
-    <>
-      <CssBaseline />
-      <Router>
-      
-        <Switch>
-          <Route path="/" element={<ImageInput />} />
-          <Route path="/form" element={<Form />} />
-          <Route path="/recs" element={<Recommendations />} />
-        </Switch>
-
-      </Router>
-    </>
-
+    <div
+      className="min-h-screen bg-[#FAF9F6] text-[#6B0F1A] font-sans flex flex-col"
+      style={{
+        fontFamily: "'DM Sans', 'Poppins', sans-serif",
+      }}
+    >
+      {/* <Navbar /> */}
+      <main className="flex-1 flex flex-col items-center justify-center px-4">
+        <Hero />
+        {/* <ServiceCards /> */}
+      </main>
+      {/* <Footer /> */}
+    </div>
   );
 }
 
