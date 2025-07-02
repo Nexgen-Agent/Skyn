@@ -1,23 +1,195 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+// frontend/src/views/GitignoreAura.jsx
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+import React, { useEffect, useRef, useState } from "react";
 
-# testing
-/coverage
+// Particle background component
+function AuraParticles() {
+  const ref = useRef();
+  useEffect(() => {
+    const canvas = ref.current;
+    const ctx = canvas.getContext("2d");
+    let width = window.innerWidth, height = window.innerHeight;
+    let particles = [];
+    function resize() {
+      width = window.innerWidth;
+.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+    for (let i = 0; i < 30; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: 1.1 + Math.random() * 1.8,
+        dx: -0.3 + Math.random() * 0.6,
+        dy: -0.3 + Math.random() * 0.6,
+        hue: 40 + Math.random() * 70
+      });
+    }
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      for (const p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+        ctx.fillStyle = `hsla(${p.hue}, 98%, 65%, 0.28)`;
+        ctx.shadowColor = `hsla(${p.hue}, 98%, 80%, 0.7)`;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.closePath();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0 || p.x > width) p.dx *= -1;
+        if (p.y < 0 || p.y > height) p.dy *= -1;
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+    return () => window.removeEventListener("resize", resize);
+  }, []);
+  return (
+    <canvas
+      ref={ref}
+      style={{
+        position: "fixed",
+        zIndex: 0,
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        opacity: 0.32,
+        pointerEvents: "none"
+      }}
+    />
+  );
+}
 
-# production
-/build
+// Main Elevation component
+export default function GitignoreAura() {
+  const [gitignore, setGitignore] = useState("");
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+  // Fetch the .gitignore file from GitHub
+  useEffect(() => {
+    fetch(
+      "https://raw.githubusercontent.com/Nexgen-Agent/Skyn/main/frontend/.gitignore"
+    )
+      .then((res) => res.text())
+      .then((txt) => setGitignore(txt));
+  }, []);
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(120deg,#0f2027 0%,#2c5364 65%,#ffecd2 100%)",
+        fontFamily: "'Poppins','Segoe UI',Arial,sans-serif",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "relative",
+        overflow: "hidden"
+      }}
+    >
+      <AuraParticles />
+      {/* Animated Aura Gradient Overlay */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          pointerEvents: "none",
+          zIndex: 1,
+          mixBlendMode: "lighten",
+          background:
+            "radial-gradient(ellipse at 30% 30%, #78ffd6 0%, transparent 60%)," +
+            "radial-gradient(ellipse at 70% 60%, #a8ff78 0%, transparent 70%)," +
+            "radial-gradient(circle at 80% 10%, #f5576c 0%, transparent 70%)",
+          opacity: 0.5,
+          animation: "auraGradientMove 14s linear infinite alternate"
+        }}
+      />
+      <style>
+        {`
+          @keyframes auraGradientMove {
+            0%{ background-position: 0% 0%, 100% 100%, 100% 0%; }
+            100%{ background-position: 100% 100%, 0% 0%, 0% 100%; }
+          }
+          .aura-glass {
+            background: rgba(255,255,255,0.18);
+            border-radius: 2.6rem;
+            box-shadow: 0 12px 36px 0 rgba(31,38,135,0.24), 0 0 60px #ffd20044;
+            border: 1.5px solid rgba(255,255,255,0.20);
+            backdrop-filter: blur(18px) saturate(140%);
+            -webkit-backdrop-filter: blur(18px) saturate(140%);
+            transition: box-shadow 0.8s, background 0.7s;
+          }
+          .aura-glass:hover {
+            box-shadow: 0 20px 72px #ffd20055, 0 4px 90px #f7971e22;
+            background: rgba(255,255,255,0.24);
+          }
+          .aura-title {
+            color: #ffd200;
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            margin-bottom: 1.2rem;
+            text-align: center;
+            filter: drop-shadow(0 2px 32px #ffd20045);
+          }
+          .aura-filename {
+            color: #f7971e;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.018em;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, #ffd200 0%, #f7971e 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+          .aura-code {
+            background: rgba(255,255,255,0.12);
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            font-size: 1.08rem;
+            color: #222;
+            padding: 1.5rem 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 2px 16px #ffd20022;
+            overflow-x: auto;
+            max-height: 60vh;
+            line-height: 1.58;
+            letter-spacing: 0.01em;
+            transition: background 0.5s;
+            margin-bottom: 0.8rem;
+            animation: auraFadeIn 1.2s;
+        }
+        @keyframes auraFadeIn {
+          0% { filter: blur(18px) opacity(0); }
+          100% { filter: blur(0) opacity(1); }
+        }
+      `}
+      </style>
+      <div
+        className="aura-glass"
+        style={{
+          maxWidth: "580px",
+          width: "97vw",
+          zIndex: 2,
+          padding: "2.7rem 2rem 2.3rem 2rem",
+          boxSizing: "border-box",
+          border: "1.5px solid #ffd20055"
+        }}
+      >
+        <div className="aura-title">Lonz Flawls Aura™ .gitignore</div>
+        <div className="aura-filename">frontend/.gitignore</div>
+        <pre className="aura-code">
+          {gitignore
+            ? gitignore
+            : "Loading..."}
+        </pre>
+      </div>
+    </div>
+  );
+}
