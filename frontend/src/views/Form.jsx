@@ -1,300 +1,309 @@
-import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-// Material UI
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-// Controllers
-import { putForm } from '../controllers/actions';
-import { useLocation } from 'react-router';
+import React, { useRef, useEffect, useState } from "react";
 
-// Lonz Flawls Aura luxury palette
-const auraColors = {
-  background: "linear-gradient(135deg, #fff1e0 0%, #f9e6f9 100%)",
-  card: "rgba(255,255,255,0.67)",
-  border: "rgba(155,34,70,0.10)",
-  accent: "#9b2246",
-  primary: "#6B0F1A",
-  label: "#7c2d4a",
-  toneSwatchBorder: "#e7b2d6"
-};
-
-const skinToneValues = [1, 2, 3, 4, 5, 6];
-const skinToneColors = [
-  "#F9F5EC", "#FAF5EA", "#F0E3AB", "#CEAC68", "#693B29", "#211C28"
-];
-const skinTypes = ["All", "Oily", "Normal", "Dry"];
-const acnes = ['Low', 'Moderate', 'Severe'];
-const otherConcerns = [
-  'sensitive', 'fine lines', 'wrinkles', 'redness', 'pore', 'pigmentation', 'blackheads', 'whiteheads',
-  'blemishes', 'dark circles', 'eye bags', 'dark spots'
-];
-
-const defaultData = {
-  tone: 5,
-  type: "Oily",
-  acne: "Moderate"
-};
-
-const Form = () => {
-  const { state } = useLocation();
-  const data = state && state.data ? state.data : defaultData;
-  const { type, tone, acne } = data;
-
-  const [currType, setCurrType] = useState(type);
-  const [currTone, setCurrTone] = useState(Number(tone));
-  const [currAcne, setAcne] = useState(acne);
-  const [features, setFeatures] = useState({
-    "normal": false, "dry": false, "oily": false, "combination": false,
-    "acne": false, "sensitive": false, "fine lines": false, "wrinkles": false,
-    "redness": false, "dull": false, "pore": false, "pigmentation": false,
-    "blackheads": false, "whiteheads": false, "blemishes": false, "dark circles": false,
-    "eye bags": false, "dark spots": false
+// Lonz Flawls Aura™ - Futuristic Form Component
+export default function AuraForm() {
+  const canvasRef = useRef();
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    message: ""
   });
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (event) => {
-    setFeatures(prev => ({
-      ...prev,
-      [event.target.name]: event.target.checked,
-    }));
-  };
-
-  const handleTone = (e) => setCurrTone(Number(e.target.value));
-  const handleType = (e) => setCurrType(e.target.value);
-  const handleAcne = (e) => setAcne(e.target.value);
-  const navigate = useNavigate();
-
-  const handleSubmit = () => {
-    // Never mutate state directly. Work with a new object.
-    const updatedFeatures = { ...features };
-
-    if (currType === 'All') {
-      updatedFeatures.normal = true;
-      updatedFeatures.dry = true;
-      updatedFeatures.oily = true;
-      updatedFeatures.combination = true;
-    } else {
-      updatedFeatures[currType.toLowerCase()] = true;
+  // Particle background animation
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    let width = window.innerWidth, height = window.innerHeight;
+    let particles = [];
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
     }
-
-    if (currAcne !== "Low") {
-      updatedFeatures.acne = true;
+    window.addEventListener("resize", resize);
+    resize();
+    for (let i = 0; i < 48; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: 1.3 + Math.random() * 2.2,
+        dx: -0.4 + Math.random() * 0.8,
+        dy: -0.4 + Math.random() * 0.8,
+        hue: 32 + Math.random() * 98
+      });
     }
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      for (const p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+        ctx.fillStyle = `hsla(${p.hue}, 97%, 70%, 0.37)`;
+        ctx.shadowColor = `hsla(${p.hue}, 98%, 80%, 0.5)`;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.closePath();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0 || p.x > width) p.dx *= -1;
+        if (p.y < 0 || p.y > height) p.dy *= -1;
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+    return () => window.removeEventListener("resize", resize);
+  }, []);
 
-    Object.keys(updatedFeatures).forEach(key => {
-      updatedFeatures[key] = updatedFeatures[key] ? 1 : 0;
-    });
+  function handleChange(e) {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  }
 
-    putForm(updatedFeatures, currType, currTone, navigate);
-  };
+  function handleSubmit(e) {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 2600);
+    setForm({ name: "", email: "", message: "" });
+  }
 
   return (
     <div
       style={{
         minHeight: "100vh",
-        background: auraColors.background,
+        width: "100vw",
+        fontFamily: "'Poppins','Segoe UI',Arial,sans-serif",
+        background:
+          "linear-gradient(120deg, #0f2027 0%, #2c5364 60%, #ffecd2 100%)",
+        position: "relative",
+        overflow: "hidden",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        fontFamily: "'DM Sans', 'Poppins', sans-serif"
       }}
     >
-      <Container
-        maxWidth="xs"
-        sx={{
-          background: auraColors.card,
-          borderRadius: "32px",
-          boxShadow: "0 8px 32px 0 rgba(31,38,135,0.10)",
-          border: `1px solid ${auraColors.border}`,
-          padding: "3rem 2rem",
+      {/* Particle background */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          zIndex: 0,
+          opacity: 0.28,
+          pointerEvents: "none",
         }}
-        alignitems="center"
+      />
+
+      {/* Animated radiant overlay */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0, left: 0, width: "100vw", height: "100vh",
+          pointerEvents: "none",
+          mixBlendMode: "lighten",
+          background: `radial-gradient(ellipse at 30% 30%, #78ffd6 0%, transparent 60%),
+                       radial-gradient(ellipse at 70% 60%, #a8ff78 0%, transparent 70%),
+                       radial-gradient(circle at 80% 10%, #f5576c 0%, transparent 70%)`,
+          opacity: 0.62,
+          zIndex: 1,
+          animation: "gradientMove 14s linear infinite alternate"
+        }}
+      />
+      <style>
+        {`
+          @keyframes gradientMove {
+            0%{ background-position: 0% 0%, 100% 100%, 100% 0%; }
+            100%{ background-position: 100% 100%, 0% 0%, 0% 100%; }
+          }
+          @keyframes pulseAura {
+            0% { box-shadow: 0 0 48px #ffd20055, 0 0 92px #f7971e22; }
+            100% { box-shadow: 0 0 82px #ffd200aa, 0 0 140px #f7971e33; }
+          }
+        `}
+      </style>
+
+      {/* Glassmorphic Form Panel */}
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          position: "relative",
+          zIndex: 3,
+          maxWidth: 420,
+          width: "95vw",
+          background: "rgba(255,255,255,0.15)",
+          borderRadius: "2.3rem",
+          boxShadow: "0 11px 36px 0 rgba(31,38,135,0.23)",
+          border: "1.5px solid rgba(255,255,255,0.22)",
+          backdropFilter: "blur(16px) saturate(140%)",
+          WebkitBackdropFilter: "blur(16px) saturate(140%)",
+          padding: "2.6rem 2.2rem 2.2rem 2.2rem",
+          textAlign: "center",
+          transition: "transform 0.7s cubic-bezier(0.39,1.26,0.51,1.01), box-shadow 0.5s"
+        }}
       >
-        <Typography
-          variant="h5"
-          component="div"
-          textAlign="center"
-          sx={{
-            fontFamily: "'Poppins', 'DM Sans', sans-serif",
-            fontWeight: 700,
-            color: auraColors.primary,
-            letterSpacing: "-0.5px",
-            marginBottom: "2vh"
+        {/* Animated SVG Aura Art */}
+        <div
+          style={{
+            width: 72,
+            height: 72,
+            margin: "0 auto 1.3rem auto",
+            borderRadius: "50%",
+            background: "linear-gradient(135deg, #f7971e 0%, #ffd200 100%)",
+            boxShadow: "0 0 48px #ffd20055, 0 0 92px #f7971e22",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            animation: "pulseAura 3s infinite alternate"
           }}
         >
-          Your Aura Results
-        </Typography>
-
-        <FormControl component="fieldset" sx={{ marginTop: "3vh", width: "100%" }}>
-          {/* Tone Selection */}
-          <Grid container alignItems="center" spacing={2}>
-            <Grid item xs={9}>
-              <InputLabel
-                id="tone-label"
-                sx={{ color: auraColors.label, fontWeight: 600, marginBottom: "0.4em" }}
-              >
-                Tone
-              </InputLabel>
-              <Select
-                labelId="tone-label"
-                id="tone-select"
-                value={currTone}
-                onChange={handleTone}
-                fullWidth
-                sx={{
-                  borderRadius: "18px",
-                  background: "#fff8f6"
-                }}
-              >
-                {skinToneValues.map((value) => (
-                  <MenuItem value={value} key={value}>{value}</MenuItem>
-                ))}
-              </Select>
-            </Grid>
-            <Grid item xs={3}>
-              <div
-                style={{
-                  height: "3rem",
-                  width: "3rem",
-                  backgroundColor: skinToneColors[currTone - 1],
-                  margin: "0 auto",
-                  borderRadius: "50%",
-                  border: `2.5px solid ${auraColors.toneSwatchBorder}`,
-                  boxShadow: "0 2px 10px rgba(155,34,70,0.08)",
-                }}
-              ></div>
-            </Grid>
-          </Grid>
-
-          {/* Type Selection */}
-          <Grid marginTop="2vh">
-            <FormLabel component="legend" sx={{ color: auraColors.label, fontWeight: 600 }}>
-              Type
-            </FormLabel>
-            <RadioGroup
-              row
-              name="row-radio-buttons-group"
-              onChange={handleType}
-              value={currType}
-              sx={{ marginTop: "0.5em" }}
-            >
-              <Grid container>
-                {skinTypes.map((stype) => (
-                  <Grid item xs={6} key={stype}>
-                    <FormControlLabel
-                      value={stype}
-                      control={<Radio
-                        sx={{
-                          color: auraColors.accent,
-                          '&.Mui-checked': { color: auraColors.primary }
-                        }}
-                      />}
-                      label={stype}
-                      sx={{ fontWeight: 500 }}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </RadioGroup>
-          </Grid>
-
-          {/* Acne Selection */}
-          <Grid marginTop="2vh">
-            <FormLabel component="legend" sx={{ color: auraColors.label, fontWeight: 600 }}>
-              Acne
-            </FormLabel>
-            <RadioGroup
-              row
-              name="row-radio-buttons-group"
-              onChange={handleAcne}
-              value={currAcne}
-              sx={{ marginTop: "0.5em" }}
-            >
-              <Grid container>
-                {acnes.map((ac) => (
-                  <Grid item key={ac}>
-                    <FormControlLabel
-                      value={ac}
-                      control={<Radio
-                        sx={{
-                          color: auraColors.accent,
-                          '&.Mui-checked': { color: auraColors.primary }
-                        }}
-                      />}
-                      label={ac}
-                      sx={{ fontWeight: 500 }}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </RadioGroup>
-          </Grid>
-
-          {/* Other Concerns */}
-          <Grid marginTop="2vh">
-            <FormLabel component="legend" sx={{ color: auraColors.label, fontWeight: 600 }}>
-              Specify other skin concerns
-            </FormLabel>
-            <Grid container>
-              {otherConcerns.map((concern) => (
-                <Grid item xs={6} key={concern}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={features[concern]}
-                        onChange={handleChange}
-                        name={concern}
-                        sx={{
-                          color: auraColors.accent,
-                          '&.Mui-checked': { color: auraColors.primary }
-                        }}
-                      />
-                    }
-                    value={concern}
-                    label={concern.charAt(0).toUpperCase() + concern.slice(1)}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </Grid>
-
-          {/* Submit Button */}
-          <Grid marginTop="2vh" item xs={12}>
-            <Button
-              onClick={handleSubmit}
-              variant="contained"
-              fullWidth
-              sx={{
-                background: `linear-gradient(90deg, ${auraColors.primary} 70%, ${auraColors.accent})`,
-                color: "#fff",
-                borderRadius: "100px",
-                fontWeight: 600,
-                fontSize: "1.1rem",
-                boxShadow: "0 3px 14px rgba(155,34,70,0.08)",
-                textTransform: "none",
-                '&:hover': {
-                  background: `linear-gradient(90deg, ${auraColors.accent} 70%, ${auraColors.primary})`,
-                  boxShadow: "0 6px 24px rgba(155,34,70,0.13)",
-                }
-              }}
-            >
-              Submit
-            </Button>
-          </Grid>
-        </FormControl>
-      </Container>
+          <svg viewBox="0 0 60 60" fill="none" style={{width: 40, height: 40}}>
+            <circle cx="30" cy="30" r="22" fill="#fffbe9" opacity="0.93"/>
+            <ellipse cx="30" cy="36" rx="13" ry="7" fill="#ffe3a3" opacity="0.7"/>
+            <ellipse cx="25" cy="27" rx="2" ry="2.3" fill="#f7971e" />
+            <ellipse cx="35" cy="27" rx="2" ry="2.3" fill="#f7971e" />
+            <path d="M24 38 Q30 43 36 38" stroke="#f7971e" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+            <g stroke="#ffd200" strokeWidth="2">
+              <line x1="30" y1="7" x2="30" y2="0"/>
+              <line x1="30" y1="53" x2="30" y2="60"/>
+              <line x1="7" y1="30" x2="0" y2="30"/>
+              <line x1="53" y1="30" x2="60" y2="30"/>
+              <line x1="14" y1="14" x2="5" y2="5"/>
+              <line x1="46" y1="14" x2="55" y2="5"/>
+              <line x1="14" y1="46" x2="5" y2="55"/>
+              <line x1="46" y1="46" x2="55" y2="55"/>
+            </g>
+          </svg>
+        </div>
+        <h2 style={{
+          fontSize: "1.6rem",
+          fontWeight: 700,
+          color: "#fffbe9",
+          letterSpacing: "0.03em",
+          marginBottom: "0.7rem",
+          textShadow: "0 2px 20px #ffd20022, 0 1px 0 #f7971e77"
+        }}>
+          Connect with your Aura
+        </h2>
+        <p style={{
+          fontSize: "1.08rem",
+          color: "#d7eaff",
+          marginBottom: "1.2rem"
+        }}>
+          Let’s begin your radiant journey.<br />
+          Fill out the form and step into the Lonz Flawls Aura™ experience.
+        </p>
+        <div style={{marginBottom: "1.05rem"}}>
+          <input
+            required
+            type="text"
+            name="name"
+            autoComplete="off"
+            placeholder="Your name"
+            value={form.name}
+            onChange={handleChange}
+            style={{
+              width: "100%",
+              padding: "0.93rem 1.1rem",
+              borderRadius: "1.2rem",
+              border: "1.2px solid #ffd20066",
+              background: "rgba(255,255,255,0.22)",
+              fontSize: "1.04rem",
+              marginBottom: "1.05rem",
+              color: "#2c5364",
+              boxShadow: "0 2px 10px #ffd20011",
+              outline: "none",
+              transition: "border 0.3s, box-shadow 0.3s",
+            }}
+            onFocus={e => e.target.style.border = "1.7px solid #ffd200"}
+            onBlur={e => e.target.style.border = "1.2px solid #ffd20066"}
+          />
+          <input
+            required
+            type="email"
+            name="email"
+            autoComplete="off"
+            placeholder="Your email"
+            value={form.email}
+            onChange={handleChange}
+            style={{
+              width: "100%",
+              padding: "0.93rem 1.1rem",
+              borderRadius: "1.2rem",
+              border: "1.2px solid #ffd20066",
+              background: "rgba(255,255,255,0.22)",
+              fontSize: "1.04rem",
+              marginBottom: "1.05rem",
+              color: "#2c5364",
+              boxShadow: "0 2px 10px #ffd20011",
+              outline: "none",
+              transition: "border 0.3s, box-shadow 0.3s",
+            }}
+            onFocus={e => e.target.style.border = "1.7px solid #ffd200"}
+            onBlur={e => e.target.style.border = "1.2px solid #ffd20066"}
+          />
+          <textarea
+            required
+            name="message"
+            rows={4}
+            placeholder="Your message"
+            value={form.message}
+            onChange={handleChange}
+            style={{
+              width: "100%",
+              padding: "0.93rem 1.1rem",
+              borderRadius: "1.2rem",
+              border: "1.2px solid #ffd20066",
+              background: "rgba(255,255,255,0.22)",
+              fontSize: "1.04rem",
+              marginBottom: "1.09rem",
+              color: "#2c5364",
+              boxShadow: "0 2px 10px #ffd20011",
+              outline: "none",
+              resize: "vertical",
+              transition: "border 0.3s, box-shadow 0.3s",
+              minHeight: 80,
+              maxHeight: 220
+            }}
+            onFocus={e => e.target.style.border = "1.7px solid #ffd200"}
+            onBlur={e => e.target.style.border = "1.2px solid #ffd20066"}
+          />
+        </div>
+        <button
+          type="submit"
+          style={{
+            fontSize: "1.1rem",
+            fontWeight: "700",
+            color: "#2c3e50",
+            border: "none",
+            padding: "0.9rem 2.2rem",
+            borderRadius: "1.4rem",
+            background: "linear-gradient(90deg, #ffd200 0%, #f7971e 100%)",
+            boxShadow: "0 3px 16px #ffd20044",
+            cursor: "pointer",
+            textShadow: "0 1px 0 #fff8",
+            transition: "background 0.5s, transform 0.2s"
+          }}
+          onMouseOver={e => e.currentTarget.style.transform = "scale(1.07)"}
+          onMouseOut={e => e.currentTarget.style.transform = "scale(1.0)"}
+        >
+          {submitted ? "Sent!" : "Send Message"}
+        </button>
+        {submitted && (
+          <div style={{
+            marginTop: "1.3rem",
+            color: "#ffd200",
+            fontWeight: "700",
+            fontSize: "1.09rem",
+            letterSpacing: "0.01em",
+            opacity: 0.95,
+            transition: "opacity 0.6s"
+          }}>
+            Thank you for connecting. Your Aura shines bright!
+          </div>
+        )}
+      </form>
     </div>
   );
-};
-
-export default Form;
+}
