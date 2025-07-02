@@ -1,58 +1,240 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
-function Hero() {
+// Lonz Flawls Aura™ Futuristic Hero
+export default function Hero() {
+  const canvasRef = useRef();
+
+  // Animated particles for the background
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    let width = window.innerWidth, height = window.innerHeight;
+    let particles = [];
+
+    const resize = () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    };
+    window.addEventListener("resize", resize);
+    resize();
+
+    for (let i = 0; i < 88; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: 1.1 + Math.random() * 2.1,
+        dx: -0.7 + Math.random() * 1.4,
+        dy: -0.7 + Math.random() * 1.4,
+        hue: 32 + Math.random() * 96
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      for (const p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+        ctx.fillStyle = `hsla(${p.hue}, 97%, 68%, 0.53)`;
+        ctx.shadowColor = `hsla(${p.hue}, 100%, 72%, 0.84)`;
+        ctx.shadowBlur = 16;
+        ctx.fill();
+        ctx.closePath();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0 || p.x > width) p.dx *= -1;
+        if (p.y < 0 || p.y > height) p.dy *= -1;
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    return () => window.removeEventListener("resize", resize);
+  }, []);
+
   return (
-    <section className="w-full min-h-[90vh] flex flex-col items-center justify-center py-20 bg-gradient-to-br from-[#fff1e0] via-[#f9e6f9] to-[#f5eafd] relative overflow-hidden font-poppins">
-      {/* Glassmorphism effect with gentle floating animation */}
+    <div
+      style={{
+        minHeight: "100vh",
+        width: "100vw",
+        overflow: "hidden",
+        fontFamily: "'Poppins', 'Segoe UI', Arial, sans-serif",
+        background:
+          "linear-gradient(120deg, #0f2027 0%, #2c5364 60%, #ffecd2 100%)",
+        position: "relative",
+      }}
+    >
+      {/* Particle Art Background */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          zIndex: 0,
+          opacity: 0.33,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Animated Gradient Overlay */}
       <div
-        className="absolute top-10 left-1/2 -translate-x-1/2 w-[90vw] max-w-4xl h-[300px] bg-white bg-opacity-45 rounded-3xl shadow-2xl backdrop-blur-xl z-0 animate-aura-float"
-        aria-hidden="true"
-      ></div>
-
-      {/* Main Hero Content */}
-      <div className="relative z-10 flex flex-col items-center">
-        <h1
-          className="text-5xl md:text-7xl font-extrabold text-[#6B0F1A] drop-shadow-xl mb-6 tracking-tight animate-fade-in"
-          aria-label="Lonz Flawless Aura"
-        >
-          Lonz Flawless Aura
-        </h1>
-        <p className="text-xl md:text-2xl text-[#7c2d4a] mb-8 font-medium max-w-2xl text-center animate-fade-in delay-150">
-          Elevate your beauty experience with our luxurious, flawless touch.<br />
-          Discover the art of self-care reimagined for the modern connoisseur.
-        </p>
-        <a
-          href="#services"
-          className="px-8 py-3 bg-gradient-to-r from-[#6B0F1A] to-[#9b2246] text-white rounded-full shadow-lg hover:scale-105 hover:shadow-2xl transition-all font-semibold text-lg focus:outline-none focus:ring-4 focus:ring-[#9b2246]/40 animate-fade-in delay-300"
-          tabIndex={0}
-        >
-          Explore Services
-        </a>
-      </div>
-
-      {/* Aura Animations */}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          pointerEvents: "none",
+          mixBlendMode: "lighten",
+          background: `radial-gradient(ellipse at 30% 30%, #78ffd6 0%, transparent 60%),
+                       radial-gradient(ellipse at 70% 60%, #a8ff78 0%, transparent 70%),
+                       radial-gradient(circle at 80% 10%, #f5576c 0%, transparent 70%)`,
+          opacity: 0.68,
+          zIndex: 1,
+          animation: "gradientMove 11s linear infinite alternate",
+        }}
+      />
       <style>
         {`
-        @keyframes aura-float {
-          0% { transform: translateX(-50%) translateY(0) scale(1);}
-          100% { transform: translateX(-50%) translateY(-18px) scale(1.03);}
-        }
-        .animate-aura-float {
-          animation: aura-float 5.6s cubic-bezier(.61,.1,0,1.01) infinite alternate;
-        }
-        .animate-fade-in {
-          opacity: 0;
-          animation: fadeIn 1.1s ease forwards;
-        }
-        .delay-150 { animation-delay: 0.15s; }
-        .delay-300 { animation-delay: 0.3s; }
-        @keyframes fadeIn {
-          to { opacity: 1; }
-        }
+          @keyframes gradientMove {
+            0%{ background-position: 0% 0%, 100% 100%, 100% 0%; }
+            100%{ background-position: 100% 100%, 0% 0%, 0% 100%; }
+          }
+          @keyframes pulseLogo {
+            0% { box-shadow: 0 0 48px #ffd20055, 0 0 92px #f7971e22; }
+            100% { box-shadow: 0 0 82px #ffd200aa, 0 0 140px #f7971e33; }
+          }
+          @media (max-width: 600px) {
+            .aura-hero-panel { padding: 1.2rem 0.5rem 1.5rem 0.5rem !important; }
+          }
         `}
       </style>
-    </section>
+
+      {/* Glassmorphic Hero Panel */}
+      <div
+        className="aura-hero-panel"
+        style={{
+          position: "relative",
+          zIndex: 2,
+          margin: "10vh auto 0 auto",
+          maxWidth: 720,
+          background: "rgba(255,255,255,0.15)",
+          borderRadius: "2.9rem",
+          boxShadow: "0 13px 36px 0 rgba(31,38,135,0.37)",
+          border: "1.5px solid rgba(255,255,255,0.22)",
+          backdropFilter: "blur(20px) saturate(140%)",
+          WebkitBackdropFilter: "blur(20px) saturate(140%)",
+          padding: "3.2rem 3rem 2.8rem 3rem",
+          textAlign: "center",
+          transition:
+            "transform 0.7s cubic-bezier(0.39,1.26,0.51,1.01), box-shadow 0.5s",
+        }}
+      >
+        {/* Animated Logo Art */}
+        <div
+          className="logo-art"
+          style={{
+            width: 120,
+            height: 120,
+            margin: "0 auto 1.7rem auto",
+            borderRadius: "50%",
+            background: "linear-gradient(135deg, #f7971e 0%, #ffd200 100%)",
+            boxShadow: "0 0 48px #ffd20055, 0 0 92px #f7971e22",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            animation: "pulseLogo 3s infinite alternate",
+          }}
+        >
+          <svg
+            viewBox="0 0 60 60"
+            fill="none"
+            style={{
+              width: 64,
+              height: 64,
+              filter: "drop-shadow(0 0 12px #fff7)",
+            }}
+          >
+            <circle cx="30" cy="30" r="22" fill="#fffbe9" opacity="0.93" />
+            <ellipse cx="30" cy="36" rx="13" ry="7" fill="#ffe3a3" opacity="0.7" />
+            <ellipse cx="25" cy="27" rx="2" ry="2.3" fill="#f7971e" />
+            <ellipse cx="35" cy="27" rx="2" ry="2.3" fill="#f7971e" />
+            <path
+              d="M24 38 Q30 43 36 38"
+              stroke="#f7971e"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* Sun rays */}
+            <g stroke="#ffd200" strokeWidth="2">
+              <line x1="30" y1="7" x2="30" y2="0" />
+              <line x1="30" y1="53" x2="30" y2="60" />
+              <line x1="7" y1="30" x2="0" y2="30" />
+              <line x1="53" y1="30" x2="60" y2="30" />
+              <line x1="14" y1="14" x2="5" y2="5" />
+              <line x1="46" y1="14" x2="55" y2="5" />
+              <line x1="14" y1="46" x2="5" y2="55" />
+              <line x1="46" y1="46" x2="55" y2="55" />
+            </g>
+          </svg>
+        </div>
+
+        <h1
+          style={{
+            fontSize: "2.85rem",
+            fontWeight: 800,
+            color: "#fffbe9",
+            letterSpacing: "0.04em",
+            marginBottom: "0.75rem",
+            textShadow: "0 2px 28px #ffd20030, 0 1px 0 #f7971e99",
+          }}
+        >
+          Lonz Flawls Aura™
+        </h1>
+
+        <p
+          style={{
+            fontSize: "1.28rem",
+            color: "#d7eaff",
+            marginBottom: "2.2rem",
+            letterSpacing: "0.02em",
+            lineHeight: 1.63,
+          }}
+        >
+          Where <b>AI meets Art</b>.<br />
+          Flawless skin, radiant confidence.<br />
+          <span style={{ color: "#ffd200" }}>
+            Elevate your beauty journey with the Aura of tomorrow.
+          </span>
+        </p>
+
+        <button
+          style={{
+            display: "inline-block",
+            padding: "1.08rem 2.5rem",
+            border: "none",
+            borderRadius: "2.1rem",
+            background: "linear-gradient(90deg, #ffd200 0%, #f7971e 100%)",
+            color: "#2c3e50",
+            fontSize: "1.18rem",
+            fontWeight: "bold",
+            boxShadow: "0 3px 16px #ffd20044",
+            transition: "background 0.5s, transform 0.2s",
+            cursor: "pointer",
+            textShadow: "0 1px 0 #fff6",
+          }}
+          onMouseOver={(e) => (e.target.style.transform = "scale(1.07)")}
+          onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+          onClick={() => window.location.href = "#explore"}
+        >
+          Enter the Aura
+        </button>
+      </div>
+    </div>
   );
 }
-
-export default Hero;
