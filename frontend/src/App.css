@@ -1,116 +1,176 @@
-/* Luxury Themed App.css for Lonz Flawless Aura - Skyn */
+/* ========== Lonz Flawls Aura™ Elevated App.css ========== */
 
-body {
+/* Universal resets and base */
+body, html {
+  min-height: 100vh;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #fff1e0 0%, #f9e6f9 50%, #f5eafd 100%);
-  font-family: 'DM Sans', 'Poppins', sans-serif;
-  color: #6B0F1A;
-  box-sizing: border-box;
-  transition: background 0.3s;
-}
-
-/* Glassmorphism for cards/sections */
-.glass {
-  background: rgba(255, 255, 255, 0.45);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.16);
-  backdrop-filter: blur(12px);
-  border-radius: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-/* Headings */
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Poppins', 'DM Sans', sans-serif;
-  font-weight: 700;
-  color: #6B0F1A;
-  letter-spacing: -0.5px;
-  margin-top: 0;
-  margin-bottom: 0.6em;
-  line-height: 1.15;
-}
-
-/* Paragraphs */
-p {
-  font-family: 'DM Sans', 'Poppins', sans-serif;
-  color: #7c2d4a;
-  font-size: 1.08rem;
-  line-height: 1.6;
-  margin-bottom: 1.1em;
-}
-
-/* Luxury Buttons */
-button, .btn {
-  background: linear-gradient(90deg, #6B0F1A 70%, #9b2246 100%);
-  color: #fff;
-  border: none;
-  padding: 14px 38px;
-  border-radius: 100px;
-  font-size: 1.12rem;
-  font-family: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 3px 14px rgba(155,34,70,0.08);
-  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-}
-button:hover, .btn:hover {
-  background: linear-gradient(90deg, #9b2246 70%, #6B0F1A 100%);
-  transform: translateY(-2px) scale(1.025);
-  box-shadow: 0 6px 24px rgba(155,34,70,0.13);
-}
-
-/* Links */
-a {
-  color: #9b2246;
-  text-decoration: none;
-  transition: color 0.18s;
-}
-a:hover {
-  color: #6B0F1A;
-  text-decoration: underline;
-}
-
-/* Inputs and Textareas */
-input, textarea, select {
-  border-radius: 18px;
-  border: 1px solid #e7b2d6;
-  padding: 12px 18px;
-  font-size: 1rem;
-  font-family: inherit;
-  background: rgba(255,255,255,0.7);
-  outline: none;
-  margin-bottom: 1em;
-  transition: border 0.18s, box-shadow 0.18s;
-}
-input:focus, textarea:focus, select:focus {
-  border-color: #9b2246;
-  box-shadow: 0 2px 14px rgba(155,34,70,0.07);
-}
-
-/* Section spacing */
-section {
-  padding: 60px 0;
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(120deg, #0f2027 0%, #2c5364 60%, #ffecd2 100%);
+  color: #fffbe9;
+  overflow-x: hidden;
   position: relative;
-  z-index: 1;
+  transition: background 1.2s cubic-bezier(.8,.08,.51,1.01);
 }
 
-/* Responsive padding and font size */
+/* Artistic animated gradient overlay */
+.aura-gradient-overlay {
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: 1;
+  background: radial-gradient(ellipse at 30% 30%, #78ffd6 0%, transparent 65%),
+              radial-gradient(ellipse at 70% 60%, #a8ff78 0%, transparent 75%),
+              radial-gradient(circle at 80% 10%, #f5576c 0%, transparent 70%);
+  mix-blend-mode: lighten;
+  opacity: 0.60;
+  animation: auraGradientMove 14s linear infinite alternate;
+}
+@keyframes auraGradientMove {
+  0%   { background-position: 0% 0%, 100% 100%, 100% 0%; }
+  100% { background-position: 100% 100%, 0% 0%, 0% 100%; }
+}
+
+/* Optional: Particle Background (use with canvas ID 'aura-particles') */
+#aura-particles {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.33;
+}
+
+/* Glassmorphic Panels */
+.aura-glass,
+.aura-card,
+.aura-panel {
+  background: rgba(255,255,255,0.16);
+  border-radius: 2.3rem;
+  box-shadow: 0 10px 32px 0 rgba(31,38,135,0.29);
+  border: 1.5px solid rgba(255,255,255,0.20);
+  backdrop-filter: blur(17px) saturate(130%);
+  -webkit-backdrop-filter: blur(17px) saturate(130%);
+  transition: transform 0.7s cubic-bezier(.39,1.26,.51,1.01), box-shadow 0.5s, background 0.4s;
+}
+.aura-glass:hover,
+.aura-card:hover,
+.aura-panel:hover {
+  transform: scale(1.025) translateY(-2px);
+  box-shadow: 0 24px 54px 0 rgba(31,38,135,0.43), 0 3px 24px #ffd20044;
+  background: rgba(255,255,255,0.22);
+}
+
+/* Headings and aura text */
+h1, .aura-title {
+  font-size: 2.7rem;
+  font-weight: 800;
+  color: #fffbe9;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.7rem;
+  text-shadow: 0 2px 24px #ffd20030, 0 1px 0 #f7971e99;
+}
+h2, .aura-section {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffd200;
+  letter-spacing: 0.03em;
+  text-shadow: 0 2px 18px #ffd20022, 0 1px 0 #f7971e77;
+}
+.aura-sub {
+  color: #f7971e;
+  letter-spacing: 0.02em;
+}
+
+/* Aura glowing button */
+.aura-btn, .aura-cta {
+  display: inline-block;
+  padding: 0.95rem 2.2rem;
+  border: none;
+  border-radius: 2rem;
+  background: linear-gradient(90deg, #ffd200 0%, #f7971e 100%);
+  color: #2c3e50;
+  font-size: 1.17rem;
+  font-weight: bold;
+  box-shadow: 0 3px 16px #ffd20044;
+  cursor: pointer;
+  text-shadow: 0 1px 0 #fff8;
+  transition: background 0.5s, transform 0.2s, box-shadow 0.4s;
+}
+.aura-btn:hover, .aura-cta:hover {
+  background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%);
+  transform: scale(1.07) translateY(-1px);
+  box-shadow: 0 6px 36px #ffd20099, 0 0 16px #f7971e22;
+}
+
+/* Aura input and textarea */
+.aura-input, .aura-textarea {
+  width: 100%;
+  padding: 0.93rem 1.1rem;
+  border-radius: 1.2rem;
+  border: 1.2px solid #ffd20066;
+  background: rgba(255,255,255,0.22);
+  font-size: 1.04rem;
+  color: #2c5364;
+  box-shadow: 0 2px 10px #ffd20011;
+  outline: none;
+  margin-bottom: 1.05rem;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+.aura-input:focus, .aura-textarea:focus {
+  border: 1.7px solid #ffd200;
+  box-shadow: 0 2px 16px #ffd20022;
+}
+
+/* Aura image preview */
+.aura-image-preview {
+  margin: 1.3rem 0 0 0;
+  border-radius: 1.3rem;
+  overflow: hidden;
+  box-shadow: 0 2px 20px #ffd20033, 0 0 0 #fff0;
+  border: 1.5px solid #ffd20033;
+  transition: box-shadow 0.5s, border 0.5s;
+  background: #fffbe9;
+  max-width: 340px;
+}
+
+/* Aura SVG logo art pulse (for SVG containers) */
+.aura-logo-art {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1.3rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+  box-shadow: 0 0 44px #ffd20055, 0 0 90px #f7971e22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: auraPulse 3s infinite alternate;
+}
+@keyframes auraPulse {
+  0% { box-shadow: 0 0 44px #ffd20055, 0 0 90px #f7971e22; }
+  100% { box-shadow: 0 0 72px #ffd200cc, 0 0 140px #f7971e33; }
+}
+
+/* Subtle transitions for links */
+a, .aura-link {
+  color: #ffd200;
+  text-decoration: none;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+a:hover, .aura-link:hover {
+  color: #f7971e;
+  text-shadow: 0 2px 16px #ffd20055;
+}
+
+/* Responsive tweaks */
 @media (max-width: 600px) {
-  body {
-    padding: 0 6px;
+  .aura-glass,
+  .aura-card,
+  .aura-panel {
+    padding: 1.1rem 0.7rem 1.3rem 0.7rem !important;
+    border-radius: 1.2rem !important;
   }
-  h1 {
-    font-size: 2.1rem;
-  }
-  h2 {
-    font-size: 1.5rem;
-  }
-  button, .btn {
-    padding: 12px 22px;
-    font-size: 1rem;
-  }
-  section {
-    padding: 34px 0;
+  .aura-logo-art {
+    width: 72px; height: 72px;
   }
 }
