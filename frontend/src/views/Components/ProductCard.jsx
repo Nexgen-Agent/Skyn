@@ -1,138 +1,160 @@
 import React from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
-// Lonz Flawls Aura luxury palette
-const auraColors = {
-  card: "rgba(255,255,255,0.86)",
-  border: "rgba(155,34,70,0.12)",
-  accent: "#9b2246",
-  primary: "#6B0F1A",
-  title: "#6B0F1A",
-  brand: "#9b2246",
-  shadow: "0 4px 24px 0 rgba(31,38,135,0.08)",
-  price: "#9b2246",
-};
-
-const ProductCard = ({ name, brand, image, price, url, concern }) => (
-  <Card
-    sx={{
-      borderRadius: "22px",
-      background: auraColors.card,
-      border: `1px solid ${auraColors.border}`,
-      boxShadow: auraColors.shadow,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      transition: "box-shadow 0.2s",
-      minHeight: 360,
-      '&:hover': {
-        boxShadow: "0 8px 32px 0 rgba(155,34,70,0.18)",
-        transform: "translateY(-3px) scale(1.03)",
-      },
-    }}
-    tabIndex={0}
-    aria-label={`Product: ${name} by ${brand}`}
-  >
-    <CardMedia
-      component="img"
-      height="160"
-      image={image}
-      alt={`${name} by ${brand}`}
-      sx={{
-        borderRadius: "18px",
-        objectFit: "cover",
-        marginTop: 2,
-        maxWidth: "85%",
-        background: "#f9e6f9"
-      }}
-    />
-    <CardContent sx={{ width: "100%", textAlign: "center", p: 2 }}>
-      <Typography
-        variant="h6"
-        component="div"
-        sx={{
-          color: auraColors.title,
-          fontWeight: 700,
-          fontFamily: "'Poppins', 'DM Sans', sans-serif",
-          mb: 0.5,
-          fontSize: "1.1rem"
-        }}
-      >
-        {name}
-      </Typography>
-      <Typography
-        variant="body2"
-        sx={{
-          color: auraColors.brand,
-          fontWeight: 500,
-          fontFamily: "'DM Sans', 'Poppins', sans-serif"
-        }}
-      >
-        {brand}
-      </Typography>
-      {concern && (
-        <Typography
-          variant="body2"
-          sx={{
-            color: auraColors.accent,
-            fontWeight: 500,
-            fontFamily: "'DM Sans', 'Poppins', sans-serif",
-            mt: 0.5,
-            fontSize: "0.95rem"
-          }}
-        >
-          Concern: {concern}
-        </Typography>
-      )}
-      {price && (
-        <Typography
-          variant="body2"
-          sx={{
-            color: auraColors.price,
-            fontWeight: 600,
-            mt: 0.7,
-            fontSize: "1.02rem"
-          }}
-        >
-          {typeof price === "string" && price.match(/^\$\d/)
-            ? price
-            : `₹${price}`}
-        </Typography>
-      )}
-      <Box mt={2}>
-        <Button
-          variant="contained"
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          endIcon={<OpenInNewIcon />}
-          sx={{
-            background: `linear-gradient(90deg, ${auraColors.primary} 70%, ${auraColors.accent})`,
-            color: "#fff",
-            borderRadius: "100px",
-            fontWeight: 600,
-            fontSize: "1rem",
-            textTransform: "none",
-            px: 3,
-            boxShadow: "0 3px 14px rgba(155,34,70,0.09)",
-            '&:hover': {
-              background: `linear-gradient(90deg, ${auraColors.accent} 70%, ${auraColors.primary})`,
-              boxShadow: "0 6px 24px rgba(155,34,70,0.13)",
-            }
-          }}
-          aria-label={`View ${name} on seller site`}
-        >
-          View
-        </Button>
-      </Box>
-    </CardContent>
-  </Card>
-);
-
-export default ProductCard;
+// Lonz Flawls Aura™ - Futuristic Product Card
+export default function ProductCard({
+  image,
+  title,
+  description,
+  price,
+  onClick,
+  cta = "Glow Up"
+}) {
+  return (
+    <div className="aura-product-card" onClick={onClick}>
+      <div className="aura-card-bg-art">
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <defs>
+            <radialGradient id="aura-grad" cx="50%" cy="50%" r="60%">
+              <stop offset="0%" stopColor="#ffd200" stopOpacity="0.95" />
+              <stop offset="55%" stopColor="#f7971e" stopOpacity="0.55" />
+              <stop offset="100%" stopColor="#2c5364" stopOpacity="0.1" />
+            </radialGradient>
+          </defs>
+          <ellipse
+            cx="100"
+            cy="110"
+            rx="90"
+            ry="80"
+            fill="url(#aura-grad)"
+            opacity="0.18"
+          />
+        </svg>
+      </div>
+      <div className="aura-product-img">
+        <img src={image} alt={title} />
+        <div className="aura-img-glow" />
+      </div>
+      <div className="aura-product-content">
+        <h3>{title}</h3>
+        <p>{description}</p>
+        <div className="aura-product-meta">
+          <span className="aura-price">${price}</span>
+          <button className="aura-cta">{cta}</button>
+        </div>
+      </div>
+      <style>{`
+        .aura-product-card {
+          position: relative;
+          background: rgba(255,255,255,0.14);
+          border-radius: 2.2rem;
+          box-shadow: 0 4px 44px 0 rgba(31,38,135,0.28);
+          border: 1.4px solid rgba(255,255,255,0.18);
+          backdrop-filter: blur(14px) saturate(135%);
+          -webkit-backdrop-filter: blur(14px) saturate(135%);
+          overflow: hidden;
+          transition: transform 0.55s cubic-bezier(0.39,1.26,0.51,1.01), box-shadow 0.45s;
+          max-width: 320px;
+          margin: 2.5rem auto;
+          cursor: pointer;
+          z-index: 1;
+        }
+        .aura-product-card:hover {
+          transform: scale(1.04) rotateY(2deg);
+          box-shadow: 0 16px 64px #ffd20055, 0 4px 60px #f7971e13;
+        }
+        .aura-card-bg-art {
+          position: absolute;
+          top: -55px; left: -48px; width: 130%; height: 170px;
+          pointer-events: none;
+          z-index: 0;
+          filter: blur(0.5px) brightness(1.16);
+        }
+        .aura-product-img {
+          position: relative;
+          width: 100%;
+          height: 170px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2;
+        }
+        .aura-product-img img {
+          height: 128px;
+          width: auto;
+          object-fit: contain;
+          border-radius: 1.7rem;
+          box-shadow: 0 3px 28px #ffd20046, 0 0 0 #fff0;
+          transition: box-shadow 0.35s;
+          background: linear-gradient(120deg,#fffbe9 70%,#ffe3a3 100%);
+        }
+        .aura-product-card:hover .aura-product-img img {
+          box-shadow: 0 6px 44px #ffd20099, 0 0 0 #fff0;
+        }
+        .aura-img-glow {
+          pointer-events: none;
+          position: absolute;
+          left: 50%; top: 60%;
+          transform: translate(-50%, -50%);
+          width: 90px; height: 40px;
+          background: radial-gradient(circle, #ffd20055, transparent 80%);
+          filter: blur(9px);
+          z-index: 1;
+        }
+        .aura-product-content {
+          position: relative;
+          z-index: 3;
+          padding: 1.3rem 1.4rem 1.5rem 1.4rem;
+          text-align: center;
+        }
+        .aura-product-content h3 {
+          font-size: 1.35rem;
+          font-weight: 700;
+          margin: 0.15rem 0 0.49rem 0;
+          color: #fffbe9;
+          letter-spacing: 0.03em;
+          text-shadow: 0 2px 20px #ffd20022, 0 1px 0 #f7971e77;
+          transition: color 0.2s;
+        }
+        .aura-product-content p {
+          font-size: 1rem;
+          color: #d7eaff;
+          margin: 0 0 1.15rem 0;
+          line-height: 1.6;
+          min-height: 48px;
+        }
+        .aura-product-meta {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-top: 0.2rem;
+        }
+        .aura-price {
+          font-size: 1.13rem;
+          font-weight: 700;
+          color: #ffd200;
+          text-shadow: 0 1px 7px #2c536455, 0 1px 0 #fff7;
+        }
+        .aura-cta {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #2c3e50;
+          border: none;
+          padding: 0.65rem 1.5rem;
+          border-radius: 1.3rem;
+          background: linear-gradient(90deg, #ffd200 0%, #f7971e 100%);
+          box-shadow: 0 2px 12px #ffd20044;
+          cursor: pointer;
+          transition: background 0.4s, transform 0.19s;
+          text-shadow: 0 1px 0 #fff9;
+        }
+        .aura-cta:hover {
+          background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%);
+          transform: scale(1.07) translateY(-2px);
+        }
+        @media (max-width: 400px) {
+          .aura-product-card { max-width: 96vw; }
+        }
+      `}</style>
+    </div>
+  );
+}
